@@ -30,7 +30,7 @@ def annotate_files(dir_list):
             print(root,sf,files)
             for f in files:
                 label = int(f.split('_')[2].split('.')[0])
-                df.append([f, sf, label])
+                df.append([f, root, label])
     annotations = pd.DataFrame(df, columns=["file", "folder", "label"])
     annotations.to_csv("fall_annotations.csv")
 
