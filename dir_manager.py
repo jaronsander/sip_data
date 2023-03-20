@@ -36,4 +36,5 @@ def annotate_files(dir_list):
 
 if __name__ == "__main__":
     # bucket_files(['poopdir1','poopdir2'],'',2)
-    annotate_files(['ambient','falls3'])
+    annotate_files(['ambient','falls3', 'water_falls', 'tap_falls', 'talk_falls', 'shower_falls',
+                    'random_falls', 'quiet_falls', 'fan_falls', 'drip_falls', 'chair_falls','ambient_falls'])
