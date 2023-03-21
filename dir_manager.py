@@ -2,7 +2,6 @@ import os
 import shutil
 import pandas as pd
 
-dir = 'refined_window'
 
 def bucket_files(dir_list, rootdir, num_buckets):
     df = []
