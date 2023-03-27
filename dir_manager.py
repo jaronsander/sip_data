@@ -36,6 +36,6 @@ def annotate_files(dir_list):
     annotations.to_csv("p_fall_annotations.csv")
 
 if __name__ == "__main__":
-    annotate_files(['percussive_audio/ambient','percussive_audio/falls3',
+    annotate_files(['percussive_audio/ambient noise',
                     'percussive_audio/water_falls', 'percussive_audio/tap_falls', 'percussive_audio/talk_falls',
                     'percussive_audio/shower_falls','percussive_audio/random_falls', 'percussive_audio/quiet_falls', 'percussive_audio/fan_falls', 'percussive_audio/drip_falls', 'percussive_audio/chair_falls','percussive_audio/ambient_falls'])
