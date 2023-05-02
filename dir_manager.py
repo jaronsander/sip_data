@@ -22,8 +22,7 @@ def bucket_files(dir_list, rootdir, num_buckets):
     annotations = pd.DataFrame(df,columns=["file","folder","label"])
     annotations.to_csv("fall_annotations.csv")
 
-
-def annotate_files(dir_list):
+def annotate_files(dir_list,name):
     df = []
     for dir in dir_list:
         print(dir)
@@ -33,16 +32,22 @@ def annotate_files(dir_list):
                 label = int(f.split('_')[2].split('.')[0])
                 df.append([f, root, label])
     annotations = pd.DataFrame(df, columns=["file", "folder", "label"])
-    annotations.to_csv("fall_annotations.csv")
+    annotations.to_csv(name)
 
 if __name__ == "__main__":
     # annotate_files(['percussive_audio/ambient noise',
     #                 'percussive_audio/water_falls', 'percussive_audio/tap_falls', 'percussive_audio/talk_falls',
     #                 'percussive_audio/shower_falls','percussive_audio/random_falls', 'percussive_audio/quiet_falls', 'percussive_audio/fan_falls', 'percussive_audio/drip_falls', 'percussive_audio/chair_falls','percussive_audio/ambient_falls'])
-    annotate_files(['ambient noise',
-                    'water_falls', 'tap_falls',
-                    'talk_falls',
-                    'shower_falls', 'random_falls',
-                    'quiet_falls', 'fan_falls',
-                    'drip_falls', 'chair_falls',
-                    'ambient_falls'])
+    # bucket_files(['ambient noise',
+    #                 'water_falls', 'tap_falls',
+    #                 'talk_falls',
+    #                 'shower_falls', 'random_falls',
+    #                 'quiet_falls', 'fan_falls',
+    #                 'drip_falls', 'chair_falls',
+    #                 'ambient_falls'], "", 5)
+    annotate_files(["fold0"], "fold0_meta.csv")
+    annotate_files(["fold1"], "fold1_meta.csv")
+    annotate_files(["fold2"], "fold2_meta.csv")
+    annotate_files(["fold3"], "fold3_meta.csv")
+    annotate_files(["fold4"], "fold4_meta.csv")
+
