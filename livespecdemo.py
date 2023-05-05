@@ -3,9 +3,10 @@ import torchaudio
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import librosa
+import numpy as np
 
 # Load the WAV file and extract the audio data
-waveform, sample_rate = torchaudio.load('sweep.wav')
+waveform, sample_rate = torchaudio.load('Long Falls/shower-long_fall_4.wav')
 NFFT = 1024
 
 WINDOW_SIZE = 1.5  # window size in seconds
@@ -20,8 +21,11 @@ mel = torchaudio.transforms.MelSpectrogram(
     hop_length=None,
     n_mels=64
 )
-spectrograms = mel(waveform)
-f1 = torch.zeros((64, window_frames)).unsqueeze(0)
+spectrograms = []
+for spec in mel(waveform):
+    spectrograms.append(np.array(librosa.power_to_db(spec)))
+f1 = torch.zeros((64, window_frames)).unsqueeze(0).repeat(3,1,1)
+spectrograms = torch.Tensor(spectrograms)
 spec = torch.cat((f1, spectrograms), 2)
 
 # Create a new plot window
@@ -30,29 +34,10 @@ fig, axs = plt.subplots(nrows=3, ncols=1, figsize=(8, 6), sharex=True, sharey=Tr
 # Initialize the plot images
 images = []
 
-vmax = [1.0]
-
-
-# for i in range(spectrograms.shape[0]):
-#     image = axs[i].imshow(librosa.power_to_db(spectrograms[i, :, :window_frames]),
-#                                               aspect='auto',
-#                           origin='lower',
-#                           cmap='inferno')
-#     images.append(image)
-
-def init():
-    f1 = torch.zeros((window_frames, int(NFFT / 2) + 1))
-    imgs = []
-    for i in range(3):
-        image = axs[i].imshow(f1,
-                              cmap='inferno')
-        imgs.append(image)
-    return imgs
-
-
 def col_generator():
-    for i in range(spec.shape[2]):
-        frame = spec[0, :, i:i + window_frames].numpy().astype('float32')
+    mul = 1
+    for i in range(int((spec.shape[2]-window_frames)/mul)):
+        frame = spec[:, :, mul*i:mul*i + window_frames].numpy().astype('float32')
         yield frame
 
 
@@ -60,22 +45,20 @@ def col_generator():
 
 def update(frame):
     # Update the plot images for each channel
-
     for i in range(len(axs)):
         if (len(images) != 3):
-            image = axs[i].imshow(frame, cmap='inferno', vmin=0, aspect='auto')
+            image = axs[i].imshow(frame[i], aspect='auto')
             axs[i].invert_yaxis()
             images.append(image)
             fig.colorbar(image, ax=axs[i])
-        max = torch.max(torch.Tensor(frame[-1]))
-        if vmax[-1] < max:
-            vmax.append(max)
-        images[i].set_clim(0, vmax[-1])
-        images[i].set(data=frame)
+            image.set_clim(np.min(frame), np.max(frame))
+        else:
+            images[i].set(data=frame[i])
+            images[i].set_clim(np.min(frame), np.max(frame))
     return images
 
 
 # Start the animation
 ani = FuncAnimation(fig, update, frames=col_generator(), blit=True,
-                    interval=2, cache_frame_data=False)
+                    interval=200, cache_frame_data=False)
 plt.show()
