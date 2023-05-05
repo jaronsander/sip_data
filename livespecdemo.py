@@ -131,6 +131,8 @@ def col_generator():
 
 # Define the update function
 fall_cache = []
+run = [0]
+mx = [0]
 def update(frame):
     # Do prediction
     pred = None
@@ -138,7 +140,14 @@ def update(frame):
         pred = cnn(torch.Tensor(frame)[None,:])
     # Update the plot images for each channel
     val = torch.max(pred, 1)[1]
-    print(val)
+
+    if val == 1:
+        run[0] += 1
+        if run[0] > mx[0]:
+            mx[0] = run[0]
+    else:
+        run[0] = 0
+    print(mx)
     fall_cache.append(val)
     fall = np.sum(fall_cache[-25:]) == 25
     if fall:
