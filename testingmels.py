@@ -12,7 +12,7 @@ plt.style.use('dark_background')
 # Parameters (audio)
 sr = 44100
 n_ch = 1
-filepath = "sweep.wav"
+filepath = "Long Falls/bath-long_fall_6-15.wav"
 n_fft = 4096
 hop_length = int(n_fft / 4 * 3)  # 0 <= hop_length < n_fft
 overlap = n_fft - hop_length
