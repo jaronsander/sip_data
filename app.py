@@ -105,6 +105,7 @@ spectrograms = torch.Tensor(spectrograms)
 spec = torch.cat((f1, spectrograms), 2)
 print(spec.shape)
 
+
 # Create a new plot window
 fig, axs = plt.subplots(nrows=3, ncols=1, figsize=(8, 6), sharex=True, sharey=True)
 
